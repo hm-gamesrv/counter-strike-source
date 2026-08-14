@@ -1,0 +1,37 @@
+{
+    "schemaVersion": 1,
+    "key": "counter-strike-source",
+    "name": "Counter-Strike: Source",
+    "registries": {
+        "ghcr": "ghcr.io/hm-gamesrv/",
+        "aliyun": "crpi-i9e7zrpnu4792a5m.cn-chengdu.personal.cr.aliyuncs.com/hiromuraki/"
+    },
+    "resources": {
+        "ports": [
+            {
+                "host": "27015",
+                "container": "27015",
+                "proto": "udp",
+                "required": true,
+                "desc": "游戏联机端口"
+            },
+            {
+                "host": "27015",
+                "container": "27015",
+                "proto": "tcp",
+                "desc": "RCON 端口"
+            }
+        ],
+        "volumes": [],
+        "env": [],
+        "extraArgs": ""
+    },
+    "variants": [
+        {
+            "key": "versus",
+            "name": "对决",
+            "tag": "versus-latest",
+            "container": "counter-strike-source-versus-server"
+        }
+    ]
+}
