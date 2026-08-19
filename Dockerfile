@@ -18,6 +18,11 @@ EXPOSE 27015/udp 27015/tcp
 
 ENV TZ=Asia/Shanghai
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
 RUN groupadd -g 1000 gamesrv \
     && useradd -u 1000 -g gamesrv -m -s /bin/bash gamesrv
 RUN mkdir -p /app && chown 1000:1000 /app
