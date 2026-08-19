@@ -81,7 +81,7 @@ jobs:
                   provenance: false
                   tags: |
                       ghcr.io/${{ steps.prep.outputs.owner }}/counter-strike-source:versus-${{ steps.prep.outputs.date }}
-                      ghcr.io/${{ steps.prep.outputs.owner }}/counter-strike-source:versus-latest
+                      ghcr.io/${{ steps.prep.outputs.owner }}/counter-strike-source:versus
                       ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_REGISTRY_NAMESPACE }}/counter-strike-source:versus-${{ steps.prep.outputs.date }}
-                      ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_REGISTRY_NAMESPACE }}/counter-strike-source:versus-latest
+                      ${{ secrets.ALIYUN_REGISTRY }}/${{ secrets.ALIYUN_REGISTRY_NAMESPACE }}/counter-strike-source:versus
                   cache-from: type=gha
