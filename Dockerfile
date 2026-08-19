@@ -18,21 +18,6 @@ EXPOSE 27015/udp 27015/tcp
 
 ENV TZ=Asia/Shanghai
 
-RUN dpkg --add-architecture i386 \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-        ca-certificates \
-        libc6:i386 \
-        libstdc++6:i386 \
-        libgcc-s1:i386 \
-        libcurl4:i386 \
-        zlib1g:i386 \
-        libncurses6:i386 \
-        libtinfo6:i386 \
-    && rm -rf /var/lib/apt/lists/* \
-    && ln -s /lib/i386-linux-gnu/libncurses.so.6 /lib/i386-linux-gnu/libncurses.so.5 \
-    && ln -s /lib/i386-linux-gnu/libtinfo.so.6 /lib/i386-linux-gnu/libtinfo.so.5
-
 RUN groupadd -g 1000 gamesrv \
     && useradd -u 1000 -g gamesrv -m -s /bin/bash gamesrv
 RUN mkdir -p /app && chown 1000:1000 /app
