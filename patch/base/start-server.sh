@@ -1,11 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-cd /app
-
 export LD_LIBRARY_PATH="/app/bin:/app/bin/linux64"
 
-/app/srcds_linux64 \
+cd /app && exec /app/srcds_linux64 \
     -game cstrike \
     -insecure \
     -nomaster \
