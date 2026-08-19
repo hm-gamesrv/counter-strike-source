@@ -13,4 +13,4 @@ export LD_LIBRARY_PATH="/app/bin:/app/bin/linux64"
     -port 27015 \
     +sv_lan 1 \
     +maxplayers 16 \
-    "$@" <&0 &
+    "$@"
