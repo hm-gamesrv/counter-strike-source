@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-cd /app && exec /app/srcds_run \
+cd /app && exec /app/srcds_run_64 \
     -game cstrike \
     -insecure \
     -ip 0.0.0.0 \

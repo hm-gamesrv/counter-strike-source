@@ -37,8 +37,9 @@ RUN groupadd -g 1000 gamesrv \
     && useradd -u 1000 -g gamesrv -m -s /bin/bash gamesrv
 RUN mkdir -p /app && chown 1000:1000 /app
 
-COPY --from=downloader --chown=1000:1000 ["/home/steam/steamcmd/linux32/steamclient.so", "/home/gamesrv/.steam/sdk32/steamclient.so"]
 COPY --from=downloader --chown=1000:1000 ["/home/steam/Steam/steamapps/common/Counter-Strike Source Dedicated Server", "/app"]
+COPY --from=downloader --chown=1000:1000 ["/home/steam/steamcmd/linux64/steamclient.so", "/home/gamesrv/.steam/sdk64/steamclient.so"]
+COPY --from=downloader --chown=1000:1000 ["/home/steam/steamcmd/linux64/steamclient.so", "/app/bin/linux64/steamclient.so"]
 RUN rm -rf /app/cstrike/maps/*
 COPY --chown=1000:1000 ["./patch/base/", "/app"]
 
