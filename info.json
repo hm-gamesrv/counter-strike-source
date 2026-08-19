@@ -30,7 +30,7 @@
         {
             "key": "versus",
             "name": "对决",
-            "tag": "versus-latest",
+            "tag": "versus",
             "container": "counter-strike-source-versus-server"
         }
     ]
