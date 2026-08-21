@@ -1,13 +1,31 @@
 # =================
-# 资源下载
+# Download
 # =================
-FROM cm2network/steamcmd AS downloader
+FROM debian:trixie-slim AS download
 
-RUN /home/steam/steamcmd/steamcmd.sh \
-    +@sSteamCmdForcePlatformType linux \
-    +login anonymous \
-    +app_update 232330 validate \
-    +quit
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget unzip ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt/depot-downloader \
+    && wget -qO /opt/depot-downloader/DepotDownloader-linux-x64.zip \
+    https://github.com/SteamRE/DepotDownloader/releases/download/DepotDownloader_3.4.0/DepotDownloader-linux-x64.zip \
+    && unzip /opt/depot-downloader/DepotDownloader-linux-x64.zip -d /opt/depot-downloader
+
+RUN /opt/depot-downloader/DepotDownloader -os linux -validate -dir /download -app 232330 -depot 232330 -manifest 8012076251401872268
+RUN /opt/depot-downloader/DepotDownloader -os linux -validate -dir /download -app 232330 -depot 232336 -manifest 4365247718224700910
+RUN /opt/depot-downloader/DepotDownloader -os linux -validate -dir /download -app 90 -depot 1006 -manifest 6403079453713498174 
+
+# ===================
+# Prune
+# ===================
+FROM download AS prune
+
+COPY --from=download --chown=1000:1000 ["/download", "/app"]
+COPY --from=download --chown=1000:1000 ["/download/linux64/steamclient.so", "/app/bin/linux64/steamclient.so"]
+COPY --chown=1000:1000 ["./patch/base/", "/app"]
+
+RUN rm -rf /app/cstrike/maps/*
 
 # ===================
 # 基座镜像
@@ -20,18 +38,15 @@ ENV TZ=Asia/Shanghai
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        ca-certificates \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 RUN groupadd -g 1000 gamesrv \
     && useradd -u 1000 -g gamesrv -m -s /bin/bash gamesrv
 RUN mkdir -p /app && chown 1000:1000 /app
 
-COPY --from=downloader --chown=1000:1000 ["/home/steam/Steam/steamapps/common/Counter-Strike Source Dedicated Server", "/app"]
-COPY --from=downloader --chown=1000:1000 ["/home/steam/steamcmd/linux64/steamclient.so", "/home/gamesrv/.steam/sdk64/steamclient.so"]
-COPY --from=downloader --chown=1000:1000 ["/home/steam/steamcmd/linux64/steamclient.so", "/app/bin/linux64/steamclient.so"]
-RUN rm -rf /app/cstrike/maps/*
-COPY --chown=1000:1000 ["./patch/base/", "/app"]
+COPY --from=prune --chown=1000:1000 ["/app/linux64/steamclient.so", "/home/gamesrv/.steam/sdk64/steamclient.so"]
+COPY --from=prune --chown=1000:1000 ["/app", "/app"]
 
 WORKDIR /app
 USER 1000:1000
